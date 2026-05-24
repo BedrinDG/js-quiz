@@ -83,6 +83,7 @@
     text-decoration: none;
     display: flex;
     align-items: center;
+    transition: .4s;
 }
 
 .pass-question a:hover {

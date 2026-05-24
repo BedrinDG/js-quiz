@@ -92,10 +92,29 @@ a.button {
     color: #fff;
 }
 
+.right-answer {
+    align-self: end;
+    gap: 13px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
 .footer {
     text-align: center;
     padding: 40px 0;
     font-size: 13px;
     line-height: 16px;
     color: #dcdcf3;
+}
+
+.disabled-link {
+    pointer-events: none;
+    cursor: default;
+    color: #888888 !important;
+    text-decoration: none;
+}
+
+.disabled-link img {
+    display: none;
 }

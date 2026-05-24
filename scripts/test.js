@@ -11,8 +11,7 @@
         userResult: [],
         init() {
             checkUserData()
-            const url = new URL(location.href);
-            const testId = url.searchParams.get('id');
+            const testId = sessionStorage.getItem('id');
 
             if (testId) {
                 const xhr = new XMLHttpRequest();
@@ -35,7 +34,6 @@
             }
         },
         startQuiz() {
-            console.log(this.quiz);
             this.progressBarElement = document.getElementById('progress-bar')
             this.questionTitleElement = document.getElementById('title')
             this.optionsElement = document.getElementById('options')
@@ -120,7 +118,9 @@
             });
             if (chosenOption && chosenOption.chosenAnswerId) {
                 this.nextButtonElement.removeAttribute('disabled');
+                this.passButtonElement.classList.add('disabled-link');
             } else {
+                this.passButtonElement.classList.remove('disabled-link')
                 this.nextButtonElement.setAttribute('disabled', 'disabled');
             }
             if (this.currentQuestionIndex === this.quiz.questions.length) {
@@ -135,6 +135,7 @@
             }
         },
         chooseAnswer() {
+            this.passButtonElement.classList.add('disabled-link');
             this.nextButtonElement.removeAttribute('disabled');
         },
         move(action) {
@@ -159,8 +160,6 @@
                     chosenAnswerId: chosenAnswerId,
                 });
             }
-
-            console.log(this.userResult)
 
             if (action === 'next' || action === 'pass') {
                 this.currentQuestionIndex++;
@@ -189,11 +188,10 @@
             this.showQuestion()
         },
         complete() {
-            const url = new URL(location.href);
-            const id = url.searchParams.get('id');
-            const name = url.searchParams.get('name');
-            const lastName = url.searchParams.get('lastName');
-            const email = url.searchParams.get('email');
+            const id = sessionStorage.getItem('id');
+            const name = sessionStorage.getItem('name');
+            const lastName = sessionStorage.getItem('lastName');
+            const email = sessionStorage.getItem('email');
 
             const xhr = new XMLHttpRequest();
             xhr.open('POST', 'https://testologia.ru/pass-quiz?id=' + id, false);
@@ -213,7 +211,10 @@
                     location.href = 'index.html';
                 }
                 if (result) {
-                    location.href = 'result.html?score=' + result.score + '&total=' + result.total;
+                    sessionStorage.setItem('answers', JSON.stringify(this.userResult));
+                    sessionStorage.setItem('score', result.score);
+                    sessionStorage.setItem('total', result.total);
+                    location.href = 'result.html';
                 }
 
             } else {
